@@ -1,0 +1,44 @@
+#include <bits/stdc++.h>
+#define ll long long
+#define fi first
+#define se second
+#define f(i,a,b) for(int i=a; i<=b; ++i)
+#define fn(i,a,b) for(int i=a; i>=b; --i)
+const int MOD=1e9+7;
+using namespace std;
+
+int main() {
+    int t;
+    cin >> t;  // Đọc số lượng test case
+    while (t--) {
+        int n;
+        cin >> n;  // Đọc số phần tử của dãy
+
+        int a[n + 1];  // Mảng a chứa dãy các số
+        f(i, 1, n) cin >> a[i];  // Nhập các số vào mảng a
+
+        int f[n + 1];  // Mảng f dùng để lưu chỉ số của các phần tử trong dãy con tăng dài nhất
+        f[1] = 1;  // Khởi tạo f[1] = 1, dãy con tăng dài nhất có ít nhất 1 phần tử
+        int res = 1;  // Kết quả, bắt đầu với dãy con dài nhất có độ dài bằng 1
+
+        // Duyệt từ phần tử thứ 2 đến phần tử cuối cùng trong mảng a
+        f(i, 2, n) {
+            int l = 1, r = res, j = 0;
+            while (l <= r) {
+                int m = (l + r) / 2;
+                if (a[i] > a[f[m]]) {
+                    j = m;  // Lưu vị trí của phần tử trong dãy con
+                    l = m + 1;  // Tiến về phía phải
+                } else {
+                    r = m - 1;  // Tiến về phía trái
+                }
+            }
+            // Nếu j là res thì ta phải tăng độ dài của dãy con
+            if (j == res) f[++res] = i;
+            // Nếu a[i] nhỏ hơn a[f[j + 1]], ta cập nhật giá trị f[j + 1]
+            if (a[i] < a[f[j + 1]]) f[j + 1] = i;
+        }
+        cout << res << endl;  // In kết quả
+    }
+    return 0;
+}
